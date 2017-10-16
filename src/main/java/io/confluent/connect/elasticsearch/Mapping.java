@@ -180,7 +180,9 @@ public class Mapping {
           defaultValueNode = JsonNodeFactory.instance.booleanNode((boolean) defaultValue);
           break;
         case ElasticsearchSinkConnectorConstants.DATE_TYPE:
-          defaultValueNode = JsonNodeFactory.instance.numberNode((long) defaultValue);
+          defaultValueNode = JsonNodeFactory.instance.numberNode(
+              ((java.util.Date) defaultValue).getTime()
+          );
           break;
         case ElasticsearchSinkConnectorConstants.BINARY_TYPE:
           //ElasticSearch has no null_value(default value) parameter for binary type

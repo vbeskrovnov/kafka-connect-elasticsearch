@@ -1,6 +1,7 @@
 package io.confluent.connect.elasticsearch;
 
 import com.google.gson.JsonObject;
+import org.apache.kafka.connect.data.Date;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.SchemaBuilder;
 import org.elasticsearch.test.ESIntegTestCase;
@@ -36,6 +37,13 @@ public class MappingWithDefaultValuesTest extends ElasticsearchSinkTestBase {
     verifyFloat32(mapping);
     verifyFloat64(mapping);
     verifyString(mapping);
+    verifyDate(mapping);
+  }
+
+  private void verifyDate(JsonObject mapping) {
+    assertEquals(mapping.get("properties").getAsJsonObject()
+        .get("date").getAsJsonObject()
+        .get("null_value").getAsLong(), 42);
   }
 
   private void verifyString(JsonObject mapping) {
@@ -98,6 +106,7 @@ public class MappingWithDefaultValuesTest extends ElasticsearchSinkTestBase {
         .field("float32", SchemaBuilder.float32().defaultValue(42.0f).build())
         .field("float64", SchemaBuilder.float64().defaultValue(42.0d).build())
         .field("string", SchemaBuilder.string().defaultValue("foo").build())
+        .field("date", Date.builder().defaultValue(new java.util.Date(42)).build())
         .build();
   }
 }
